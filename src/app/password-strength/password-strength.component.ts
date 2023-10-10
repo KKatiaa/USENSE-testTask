@@ -37,17 +37,19 @@ export class PasswordStrengthComponent implements OnInit {
     const containsDigits = onlyNumbersRegExp.test(password);
     const containsSymbols = onlySymbolsRegExp.test(password);
 
-    if (!password) {
-      this.isFirstCircle = 'grey';
-      this.isSecondCircle = 'grey';
-      this.isThirdCircle = 'grey';
-    }
+    const isStrOnlyLetDigSym = (containsLetters || containsDigits || containsSymbols) && password.length >= 8;
+
     if (password.length < 8) {
       this.isFirstCircle = 'red';
       this.isSecondCircle = 'red';
       this.isThirdCircle = 'red';
     }
-    if ((containsLetters || containsDigits || containsSymbols) && password.length >= 8) {
+    if (!password) {
+      this.isFirstCircle = 'grey';
+      this.isSecondCircle = 'grey';
+      this.isThirdCircle = 'grey';
+    }
+    if (isStrOnlyLetDigSym) {
       this.isFirstCircle = 'red';
       this.isSecondCircle = 'grey';
       this.isThirdCircle = 'grey';
@@ -63,19 +65,17 @@ export class PasswordStrengthComponent implements OnInit {
     const containsDigits = digitsRegExp.test(password);
     const containsSymbols = symbolsRegExp.test(password);
 
-    if (!password) {
-      this.isFirstCircle = 'grey';
-      this.isSecondCircle = 'grey';
-      this.isThirdCircle = 'grey';
-    }
-    if (containsLetters && containsSymbols && containsDigits && password.length >= 8) {
+    const isOnlyCombinationOf2 = ((containsLetters && containsSymbols) ||
+      (containsLetters && containsDigits) ||
+      (containsDigits && containsSymbols)) && password.length >= 8;
+    const isLetDigSym = containsLetters && containsSymbols && containsDigits && password.length >= 8;
+
+    if (isLetDigSym) {
       this.isFirstCircle = 'green';
       this.isSecondCircle = 'green';
       this.isThirdCircle = 'green';
 
-    } else if (((containsLetters && containsSymbols) ||
-      (containsLetters && containsDigits) ||
-      (containsDigits && containsSymbols)) && password.length >= 8) {
+    } else if (isOnlyCombinationOf2) {
       this.isFirstCircle = 'yellow';
       this.isSecondCircle = 'yellow';
       this.isThirdCircle = 'grey';
